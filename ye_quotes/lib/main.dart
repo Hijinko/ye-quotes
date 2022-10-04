@@ -67,7 +67,7 @@ class _YeQuotes extends State<YeQuotes> {
                       future: _quote,
                       builder: (context, quote) {
                         if (quote.hasData) {
-                          tts.setRate(.9);
+                          tts.setRate(1.1);
                           tts.speak("${quote.data}");
                           return Text(
                             '"${quote.data!}"',
