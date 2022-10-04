@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
+import 'package:text_to_speech/text_to_speech.dart';
 
 void main() => runApp(const App());
 
@@ -23,9 +24,13 @@ class YeQuotes extends StatefulWidget {
 }
 
 class _YeQuotes extends State<YeQuotes> {
+  TextToSpeech tts = TextToSpeech();
+  late Future<String> _quote;
+
   Future<String> fetchQuote() async {
     final Uri uri = Uri.parse('https://api.kanye.rest/');
     final res = await http.get(uri);
+
     if (res.statusCode == 200) {
       final quote = jsonDecode(res.body);
       return quote['quote'];
@@ -33,8 +38,6 @@ class _YeQuotes extends State<YeQuotes> {
       return "Sorry error getting the quote. Make sure you are connected to the internet";
     }
   }
-
-  late Future<String> _quote;
 
   @override
   void initState() {
@@ -64,6 +67,8 @@ class _YeQuotes extends State<YeQuotes> {
                       future: _quote,
                       builder: (context, quote) {
                         if (quote.hasData) {
+                          tts.setRate(1.1);
+                          tts.speak("${quote.data}");
                           return Text(
                             '"${quote.data!}"',
                             style: GoogleFonts.yesevaOne(fontSize: 40),
